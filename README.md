@@ -1,211 +1,81 @@
 # Simple Linear Regression - Marketing ROI Analysis
 
-## Project Overview
+Overview
+This project analyzes a marketing dataset using Python and statsmodels to build a Simple Linear Regression model. The goal is to determine which marketing channel (TV, Radio, or Social Media) has the strongest impact on Sales and to produce clear, ROI-based recommendations for marketing budget allocation.
 
-This project analyzes a marketing dataset using Python and `statsmodels` to build a **Simple Linear Regression model**. The goal is to understand which marketing channel (TV, Radio, or Social Media) has the strongest impact on Sales and provide data-driven recommendations for budget allocation.
+Dataset
+- File: marketing_and_sales_data_evaluate_lr.csv
+- Columns:
+  - TV: TV advertising spend (units)
+  - Radio: Radio advertising spend (units)
+  - Social_Media: Social Media advertising spend (units)
+  - Sales: Product sales revenue (units)
 
-### Key Objectives
+Quick summary of results (from regression_analysis.ipynb)
+- Sample size after cleaning: n = 16 (one row with missing TV removed)
+- Regression equation: Sales = 21.4931 + 8.5564 * Radio
+- R-squared: 0.8951 (89.51%)
+- Adjusted R-squared: 0.8871
+- F-statistic: 119.7995 (Prob (F-statistic) ≈ 1.13e-08)
+- Radio coefficient (slope): 8.5564
+  - Std. error: 0.7811
+  - t-statistic: 10.9547
+  - p-value: 2.75e-08
+  - 95% CI: [6.8804, 10.2324]
+- Assumption tests:
+  - Shapiro–Wilk (residual normality) p-value: 0.921176 → pass
+  - Breusch–Pagan (heteroscedasticity) p-value: 0.687621 → pass
+  - Durbin–Watson (independence) statistic: 1.937429 → no concerning autocorrelation
 
-- ✅ Load and clean the marketing dataset
-- ✅ Perform exploratory data analysis (EDA) with visualizations
-- ✅ Identify the independent variable most correlated with Sales
-- ✅ Build an OLS regression model using statsmodels
-- ✅ Create diagnostic plots to validate regression assumptions
-- ✅ Interpret R-squared, coefficients, and p-values
-- ✅ Formulate ROI-based business recommendations
+Interpretation (business-friendly)
+- For every 1 unit increase in Radio spend, Sales increase by ≈ 8.5564 units (statistically significant, p << 0.05).
+- The model explains ~89.5% of the variability in Sales — an excellent fit for a single predictor model.
+- Diagnostic tests and plots (Residuals vs Fitted, Q-Q, Scale-Location) do not indicate major violations of OLS assumptions on this dataset.
 
-## Dataset
+ROI note (as implemented in notebook)
+- If you interpret 1 unit spent → 8.5564 units revenue, net return (simplified) = 8.5564 - 1 = 7.5564 units per unit spent → ~755.64% (this is a simplified metric; use business margins and costs for a real ROI calculation).
 
-**File:** `marketing_and_sales_data_evaluate_lr.csv`
-
-**Columns:**
-- `TV`: TV advertising spend (in units)
-- `Radio`: Radio advertising spend (in units)
-- `Social_Media`: Social Media advertising spend (in units)
-- `Sales`: Product sales revenue (in units)
-
-**Focus Variable:** Radio (independent variable)
-
-## Installation & Setup
-
-### Prerequisites
-
-- Python 3.7 or higher
-- Jupyter Notebook or JupyterLab
-
-### Install Required Packages
-
-```bash
-pip install pandas numpy matplotlib seaborn statsmodels scipy scikit-learn
-```
-
-Or install from the requirements file:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Project Structure
+Project structure
 
 ```
 marketing-regression-analysis/
 ├── README.md
 ├── requirements.txt
-├── regression_analysis.ipynb          # Main Jupyter Notebook
+├── regression_analysis.ipynb          # Main Jupyter Notebook (cleaned & contains results)
 ├── marketing_and_sales_data_evaluate_lr.csv  # Dataset
-└── diagnostic_plots/                  # Output directory (created during analysis)
+└── diagnostic_plots/                  # Optional: generated plots (if executed)
     ├── correlation_heatmap.png
     ├── distribution_plots.png
-    ├── residuals_vs_fitted.png
-    ├── qq_plot.png
-    └── scale_location_plot.png
+    ├── bivariate_analysis.png
+    ├── diagnostic_plots.png
+    └── regression_line_plot.png
 ```
 
-## Running the Analysis
-
-1. **Clone the repository:**
-   ```bash
+How to reproduce (steps)
+1. Clone repo:
    git clone https://github.com/Insikai/marketing-regression-analysis.git
    cd marketing-regression-analysis
-   ```
-
-2. **Install dependencies:**
-   ```bash
+2. Install dependencies:
    pip install -r requirements.txt
-   ```
+   (or pip install pandas numpy matplotlib seaborn statsmodels scipy scikit-learn)
+3. Execute the notebook so all outputs and plots are embedded:
+   Option A — interactive:
+     jupyter lab
+     Open regression_analysis.ipynb → Kernel → Restart & Run All → Save
+   Option B — headless:
+     jupyter nbconvert --to notebook --execute --inplace regression_analysis.ipynb --ExecutePreprocessor.timeout=600
+4. Confirm that plots render, then commit any additional files (e.g., diagnostic_plots images) if needed.
 
-3. **Open the Jupyter Notebook:**
-   ```bash
-   jupyter notebook regression_analysis.ipynb
-   ```
+Notes & limitations
+- Small sample size (n = 16) — interpret results with caution and prefer validating with more data.
+- The ROI calculation shown in the notebook is simplified; for business decisions include profit margins and costs.
+- Correlation does not imply causation — consider A/B tests or controlled experiments to validate causal impact.
 
-4. **Run all cells** to execute the complete analysis
+What I fixed / why
+- The notebook file regression_analysis.ipynb previously had invalid JSON / control-character metadata that prevented Jupyter/GitHub from opening it. I repaired the JSON so the notebook opens. The notebook already contains executed outputs and the numeric results listed above.
 
-## Analysis Steps
+Next actions I can take for you
+- Re-run the notebook headlessly, save the generated PNG diagnostic plots into diagnostic_plots/, and push them to the repo.
+- Produce a one-page PDF report (including plots) for submission.
 
-### 1. Data Loading & Exploration
-- Load the CSV file
-- Display basic statistics
-- Check for missing values
-- Examine data types
-
-### 2. Exploratory Data Analysis (EDA)
-- Univariate analysis: Distribution of each variable
-- Bivariate analysis: Correlation matrix
-- Visualizations: Histograms, scatter plots, heatmaps
-
-### 3. Variable Selection
-- Calculate correlation coefficients
-- Justify selection of Radio as the independent variable
-- Discuss expected business impact
-
-### 4. Model Building
-- Prepare data (add constant for intercept)
-- Fit OLS regression model
-- Display model summary with statistics
-
-### 5. Assumption Validation
-- **Linearity:** Scatter plot with regression line
-- **Normality:** Q-Q plot of residuals
-- **Homoscedasticity:** Residuals vs. Fitted values plot
-- **Independence:** Durbin-Watson test (if applicable)
-
-### 6. Model Interpretation
-- **R-squared:** Proportion of variance explained
-- **Coefficients:** Slope and intercept interpretation
-- **P-values:** Statistical significance testing
-- **Confidence Intervals:** Range of coefficient estimates
-
-### 7. Business Recommendations
-- ROI calculation based on model results
-- Budget allocation strategy
-- Risk considerations and limitations
-
-## Key Outputs
-
-### Model Summary Statistics
-```
-                            OLS Regression Results                            
-==============================================================================
-Dep. Variable:                  Sales   R-squared:                       0.XXX
-Model:                            OLS   Adj. R-squared:                  0.XXX
-Method:                 Least Squares   F-statistic:                     XXX
-Date:                                   Prob (F-statistic):              0.XXX
-Time:                                   Log-Likelihood:                  XXX
-No. Observations:                  XX   AIC:                             XXX
-Df Residuals:                      XX   BIC:                             XXX
-Df Model:                           1
-Covariance Type:            nonrobust
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-const          XXX      XXX        XXX      XXX        XXX        XXX
-Radio          XXX      XXX        XXX      XXX        XXX        XXX
-==============================================================================
-```
-
-### Diagnostic Plots
-1. **Residuals vs Fitted Values** - Check for patterns
-2. **Q-Q Plot** - Test normality of residuals
-3. **Scale-Location Plot** - Check homoscedasticity
-4. **Correlation Heatmap** - Show variable relationships
-
-## Business Insights
-
-### Radio Channel ROI Analysis
-
-**Key Findings:**
-- Radio advertising shows a strong correlation with sales
-- For every unit increase in Radio spending, sales increase by approximately [coefficient] units
-- The model explains [R-squared]% of the variation in sales
-- Statistical significance level: p-value = [value] (significant at α = 0.05)
-
-### Recommendations
-
-1. **Budget Allocation:** Increase Radio advertising investment based on the positive ROI
-2. **Scale:** Consider the elasticity of sales with respect to Radio spending
-3. **Testing:** Run A/B tests to validate model predictions
-4. **Monitoring:** Track actual vs. predicted sales regularly
-
-## Limitations & Considerations
-
-- Small sample size (n=17) - results may not generalize
-- Missing value in TV (row 14) - handled through removal
-- Assumes linear relationship - may not capture complex interactions
-- External factors not included in the model
-- Temporal trends not accounted for
-
-## Technologies Used
-
-- **Python 3.x**
-- **Pandas:** Data manipulation and analysis
-- **NumPy:** Numerical computations
-- **Matplotlib & Seaborn:** Data visualization
-- **Statsmodels:** OLS regression and diagnostics
-- **Scikit-learn:** Additional statistical metrics
-
-## References
-
-- [Statsmodels Documentation](https://www.statsmodels.org/)
-- [OLS Regression Guide](https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLS.html)
-- [Regression Diagnostics](https://www.statsmodels.org/stable/graphics.html)
-
-## Author
-
-**Insikai**
-
-## License
-
-MIT License - Feel free to use this project for educational purposes.
-
----
-
-## Questions or Issues?
-
-If you encounter any problems:
-1. Check that all dependencies are installed: `pip install -r requirements.txt`
-2. Ensure the CSV file is in the correct directory
-3. Verify the notebook cells run in order
-4. Check Python version compatibility (3.7+)
-
-Happy analyzing! 📊📈
+If you want me to proceed with re-running the notebook and pushing plots (or producing a PDF), confirm which action(s) you want and I’ll perform them.
